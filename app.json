@@ -4,11 +4,11 @@
     "slug": "SterlingSelect",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/sterling1024px.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/sterlingsplash1.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#efa834"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
