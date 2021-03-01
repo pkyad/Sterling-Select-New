@@ -2,42 +2,58 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions/index';
 import * as actionTypes from '../actions/actionTypes';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeStack from '../stacks/HomeStack';
 import CartStack from '../stacks/CartStack';
 import CatagoryStack from '../stacks/CatagoryStack';
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 const themecolor = settings.themecolor
 import settings from '../Appsettings'
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 function TabNavigator(props) {
-    console.log(props,"prprp")
+    const getTabBarVisibility = (route)=>{
+       const routeName = route.state?route.state.routes[route.state.index].name:''
+       if(routeName =="CheckoutProductsNew"||"CheckoutProductsNew"){
+         return false
+       }
+       return true
+    }
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      activeColor={themecolor}
       inactiveColor={"black"}
-      barStyle={{ backgroundColor:"#fff" }}
+       tabBarOptions={{
+        activeBackgroundColor:themecolor,
+       activeTintColor:"#fff",
+       inactiveTintColor:"gray"
+      
+     }}
+    
     >
       <Tab.Screen name="Home" component={HomeStack} 
+    
           options={{
-          
           tabBarLabel: 'Home',
+         
           tabBarIcon: ({ color }) => (
         <AntDesign name="home" size={24} color={color} />
           ),
+          
         }}
       />
-      <Tab.Screen name="Cart" component={CartStack} 
-          options={{
+      <Tab.Screen name="Cart" component={CartStack}
+          options={({ route }) => ({
+        
           tabBarLabel: 'Cart',
+          tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({ color }) => (
         <Feather name="shopping-cart" size={24} color={color} />
           ),
           tabBarBadge:props.counter
-        }}
+      })} 
+       
       />
        <Tab.Screen name="Catagories" component={CatagoryStack} 
           options={{

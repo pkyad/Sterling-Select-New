@@ -20,10 +20,9 @@ import NetInfo from '@react-native-community/netinfo';
 import HttpsClient from '../helpers/HttpsClient';
 const url = settings.url
 const themecolor = settings.themecolor
-export default class RenderItems extends React.Component {
+export default class ProductCard extends React.Component {
   constructor(props) {
     super(props);
-
     var prod = props.product;
     var cartLoaderShow=props.cartLoaderShow
     var customUnit = ''
@@ -902,16 +901,15 @@ export default class RenderItems extends React.Component {
         if(this.state.varientCount[this.state.selectedIndex] == 0){
            
             return(
-                 <TouchableOpacity style={{flexDirection:"row",backgroundColor:themecolor,width:"70%",borderRadius:10,paddingVertical:5,paddingHorizontal:20,alignItems:"center",justifyContent:'center'}}
-                   onPress={this.addToCartUpdate}
+                 <TouchableOpacity style={{width:width*0.2,height:height*0.05,borderColor:"gray",borderWidth:2,borderRadius:20,alignItems:"center",justifyContent:"center"}}
+                  onPress={this.addToCartUpdate}
                  >
-                            <Text style={{color:'#fff',marginRight:10}}>ADD TO</Text>
-                            <Feather name="shopping-cart" size={24} color="#fff" style={{marginRight:10}}/>
-                    </TouchableOpacity>
+                             <FontAwesome name="cart-plus" size={24} color="gray"/> 
+                     </TouchableOpacity>
             )
         }else{
             return(
-           <View style={{flexDirection:"row",width:width*0.3,borderColor:"gray",borderWidth:2,borderRadius:10,alignItems:'center',justifyContent:"space-around"}}>
+           <View style={{flexDirection:"row",width:width*0.2,height:height*0.05,borderColor:"gray",borderWidth:2,borderRadius:10,alignItems:'center',justifyContent:"space-around"}}>
               <TouchableOpacity style={{}}
                 onPress={this.decreaseCart}
               >
@@ -940,29 +938,26 @@ export default class RenderItems extends React.Component {
 
 
   render(){
+        
        var item = this.props.product
     return (
-  <View>
-       <TouchableOpacity style={{height:height*0.3,backgroundColor:"#fff",elevation:5,width:width*0.55,marginHorizontal:10,marginBottom:10}}
- onPress={()=>{this.props.navigation.navigate('ProductInfo',{pk:item.pk})}}
- 
- >
-              <View style={{flex: 0.5,alignItems:"center",justifyContent:"center"}}>
-                  <Image source={{uri:`${url}/media/${item.image}`}} style={{height:"100%",width:"100%",resizeMode:"contain"}} />
-              </View>
-              <View style={{flex: 0.5,alignItems:"center",justifyContent:"space-around"}}>
-                    <View style={{alignItems:"center",justifyContent:"center"}}>
-                        <Text>{item.name}</Text>
-                    </View>
-                    <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between",zIndex:20}}>
-                         {
+
+   
+  <View style={{flexDirection:"row",height:height*0.2,}}>
+                <View style={{flex: 0.3,alignItems:"center",justifyContent:"center"}}>
+                     <Image source={{uri:`${url}/media/${item.image}`}} style={{height:"80%",width:"80%",resizeMode:"contain"}} />
+                </View>
+
+                <View style={{flex: 0.4,alignItems:"flex-start",justifyContent:"center"}}>
+                    <Text>{item.name}</Text>
+                      {
                              this.state.varientChoicesName.length <=1 && this.state.customUnit!='Size and Color'&&this.state.varientChoicesName[0]!=undefined&&
-                             <View>
+                            
                                  <Text>{this.state.varientChoicesText[0]}</Text>
-                             </View>
-                         }
-                        { (this.state.customUnit!='Size and Color'&&this.state.varientChoices.length >1)  &&
-                             <TouchableOpacity style={{flexDirection:'row',alignItems:"center",justifyContent:'center'}}
+                            
+                     }
+                          { (this.state.customUnit!='Size and Color'&&this.state.varientChoices.length >1)  &&
+                             <TouchableOpacity style={{flexDirection:'row',alignItems:"center",justifyContent:'center',borderColor:'#000',borderWidth:1}}
                                onPress={()=>{this.openVarientSelection()}}
                              >
                                    <Text>{this.state.varientChoicesText[this.state.selectedIndex]}</Text>
@@ -971,10 +966,15 @@ export default class RenderItems extends React.Component {
                                    </View>
                              </TouchableOpacity>
                          }
-                        <Text style={{color:themecolor,fontWeight:"bold",fontSize:20,marginLeft:10}}>₹{Math.round(this.state.salePrices[this.state.selectedIndex])}</Text>
-                        <Text style={{color:"gray",textDecorationLine:"line-through",marginLeft:5}}>₹{Math.round(this.state.mrp)}</Text>
+                    <View style={{flexDirection:"row",alignItems:'center'}}>
+                       <Text style={{color:themecolor,fontWeight:"bold",fontSize:20}}>₹{Math.round(this.state.salePrices[this.state.selectedIndex])}</Text>
+                       <Text style={{color:"gray",textDecorationLine:'line-through',marginLeft:10}}>₹{Math.round(this.state.mrp)}</Text>
                     </View>
-                        {this.state.inStock!=null&&this.state.inStock < 1 &&
+                
+                </View>
+
+                <View style={{flex: 0.3,alignItems:"center",justifyContent:"center",}}>
+                      {this.state.inStock!=null&&this.state.inStock < 1 &&
                             <View style={{alignItems:'center',justifyContent:'center',height:27,paddingHorizontal:5,backgroundColor: 'red' ,marginTop:5,}}>
                                 <Text style={{ color: '#fff',  fontSize: 13, fontWeight: '300', textAlign: 'center',  borderWidth: 0, }}>SOLD OUT</Text>
                             </View>
@@ -989,12 +989,9 @@ export default class RenderItems extends React.Component {
                                 {this.cartActions()}
                             </View>
                         }
-  
-                       
-              </View>
-          </TouchableOpacity>
-  </View>      
- 
+                     
+               </View>
+           </View>
       
 
     );
@@ -1031,26 +1028,3 @@ const pickerVarientStyles = StyleSheet.create({
     borderColor:'red'// to ensure the text is never behind the icon
   },
 });
-
-
-// <Picker
-//   selectedValue={this.state.selectName}
-//   mode="dropdown"
-//   style={{ flex:1,height:25, width: this.state.store.quickadd?(width * 0.27):(width * 0.54) }}
-//   onValueChange={(itemValue, itemIndex)=>this.dropDownChanged(itemValue, itemIndex)}>
-//   {varientChoicesText}
-// </Picker>
-
-
-// <TouchableWithoutFeedback onPress={()=>{if(this.state.store.quickadd) return;this.props.navigation.navigate('ProductDetails',{product:this.state.product.pk,userScreen:this.props.userScreen})}}>
-//   <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 10 }}>
-//     <View style={{ width: width * 0.27, paddingHorizontal: 3, paddingVertical: 2, borderWidth: 1, borderColor: themeColor, borderRadius: 3, marginRight: 10 }}>
-//       <Text style={{ textAlign: 'center', color: 'black' }}>Save</Text>
-//       <Text style={{ textAlign: 'center', color: 'red' }}>&#8377;{Math.round(this.state.discount)}</Text>
-//     </View>
-//     <View >
-//       <Text style={{ color: '#a2a2a2', marginTop: 2, fontSize: 14 }}>MRP &#8377;{this.state.mrp}</Text>
-//       <Text style={{ color: themeColor, marginTop: 1, fontSize: 14 }}>{priceTitle} &#8377;{Math.round(this.state.salePrice)}</Text>
-//     </View>
-//   </View>
-//   </TouchableWithoutFeedback>

@@ -8,6 +8,7 @@ import HelpScreen from '../Screens/HelpScreen';
 import PasscodeScreen from '../Screens/PasscodeScreen';
 import SterlingLogin from '../Screens/SterlingLogin';
 import SterlingOTP from '../Screens/SterlingOTP';
+import productInfo from '../Screens/productInfo';
 
 const Stack = createStackNavigator();
 export default function HomeStack() {
@@ -16,6 +17,7 @@ export default function HomeStack() {
          <Stack.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
          <Stack.Screen name="ViewAllProducts" component={ViewAllProducts} options={{headerShown:false}}/>
          <Stack.Screen name="SearchScreen" component={SearchScreen} options={{headerShown:false}}/>
+         <Stack.Screen name="ProductInfo" component={productInfo} options={{headerShown:false}}/>
 
                                {/* DRAWER */}
          <Stack.Screen name="HelpScreen" component={HelpScreen} options={{headerShown:false}}/>

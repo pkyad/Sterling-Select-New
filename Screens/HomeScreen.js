@@ -14,6 +14,8 @@ import { connect } from 'react-redux';
 import * as actions from '../actions/index';
 import * as actionTypes from '../actions/actionTypes';
 import RenderItems from './RenderItems';
+import Modal from "react-native-modal";
+import Toast, {DURATION} from 'react-native-easy-toast';
 const themecolor = settings.themecolor
 const url = settings.url
 const width = Dimensions.get('window').width;
@@ -29,6 +31,8 @@ const images =[
  class  HomeScreen extends React.Component {
     constructor(props) {
     super(props);
+    homeScreen = this;
+    this.mounted=false
     this.state = {
         mostBoughtItems:[],
         mostBoughtOffset:0,
@@ -37,7 +41,14 @@ const images =[
         allProductsItem:[],
         allProductsOffset:0,
         cartItems :this.props.cart,
+        cartLoaderShow:false,
+        modalVisible:false,
+        selectedProduct:null,
+        variantShow:false,
+        selectedStore:this.props.selectedStore,
+        
     };
+
   }
    
 
@@ -50,7 +61,7 @@ const images =[
              this.setState({mostBoughtItems:this.state.mostBoughtItems.concat(data.data.results)})
              
          } 
-         //console.log(api,"uuuu") 
+         console.log(api,"uuuu") 
     }
       forYou =async()=>{
          // console.log("forr called")
@@ -74,16 +85,21 @@ const images =[
     }
   componentDidMount(){  
       //console.log(this.props,"hhjhj")
+      this.mounted = true;
       this.mostBought()
       this.forYou()
       this.allProducts()
       this.getServiceCart()
   }
+   openVariantSelection=(variants,type)=>{
+     console.log(variants,'gjhjhjkjk');
+    this.setState({selectionType:type,selectedProduct:variants,variantShow:true})
+  }
 
  getServiceCart =async()=>{
         const api =(`${url}/api/POS/cartService/`)
         const data = await HttpClient.get(api)
-        //console.log(data)
+        console.log(data)
         if(data.type=="success"){
            
             let arr =[]
@@ -126,10 +142,87 @@ const images =[
     }
 
   }
+   setModalVisible=(bool)=>{
+    this.setState({modalVisible:bool})
+  }
+  variantSelection =()=>{
+    var value2 = []
+    if(this.state.selectedProduct!=null){
+         if(this.state.selectedProduct.value2!=null&&this.state.selectedProduct.value2!=undefined){
+           value2 = this.state.selectedProduct.value2
+         }
+    }
+
+
+
+
+   selectVariant =(name,index,id)=>{
+     console.log(this.refs[id],'hsjcdjk');
+      this.setState({selectedProduct:null,variantShow:false})
+      if(this.state.selectionType=='mostBought'){
+        this.refs[id].dropDownChanged(name,index)
+      }else if(this.state.selectionType=='forYou'){
+        this.refs['forYou'+id].dropDownChanged(name,index)
+      }else if(this.state.selectionType=='allProducts'){
+        this.refs['allProducts'+id].dropDownChanged(name,index)
+      }
+    }
+
+      return(
+        <Modal isVisible={this.state.variantShow} propagateSwipe={true}  animationIn="fadeIn" useNativeDriver={true} animationOut="fadeOut" hasBackdrop={true} useNativeDriver={true} propagateSwipe={true} onRequestClose={()=>this.setState({variantShow:false,selectedProduct:null})} onBackdropPress={()=>{this.setState({variantShow:false,selectedProduct:null})}} >
+         {this.state.selectedProduct!=null&&
+           <View style={{alignItems:"center",justifyContent:"center",backgroundColor:"#fff",height:height*0.3,borderRadius:10}}>
+                
+                  <Text style={{marginTop:15}}>Available Quantities for</Text>
+                  <FlatList contentContainerStyle={{alignItems:"center",justifyContent:"center",marginTop:15}}
+                        data={this.state.selectedProduct.variants}
+                        keyExtractor={(item,index) => {
+                          return index.toString();
+                        }}
+                        horizontal={false}
+                        onEndThreshold={0}
+                        extraData={this.state}
+                        renderItem={({item, index}) => {
+                          if(value2[index]!=undefined&&value2[index]!=null){
+                            value2[index] = null
+                          }
+                          var sizeFont = value2[index]!=null?13:16
+                          return(
+                            <TouchableOpacity key={index} onPress={()=>selectVariant(item,index,this.state.selectedProduct.indexFind)}  style={{flexDirection:'row'}}
+                             style={{}}
+                            >
+                              <View style={{width:value2[index]==null?width-80:width-120,paddingVertical:5,}}>
+                                <View style={{flexDirection:'row',backgroundColor:this.state.selectedProduct.selectedIndex==index?themecolor:'#fff',borderRadius:5,borderWidth:this.state.selectedProduct.selectedIndex==index?0:1,borderColor:'#d2d2d2',paddingVertical:5,paddingHorizontal:10,alignItems:'center',justifyContent:'center',width:'100%'}}>
+                                <Text style={{color:this.state.selectedProduct.selectedIndex==index?'#fff':'grey',fontSize:sizeFont,fontWeight:'700'}}>{item.name}  -</Text>
+                                <Text style={{color:this.state.selectedProduct.selectedIndex==index?'#fff':'grey',fontSize:sizeFont,fontWeight:'700',textDecorationLine: 'line-through',marginHorizontal:10, textDecorationStyle: 'solid'}}>&#8377;{item.mrp}</Text>
+                                 <Text style={{color:this.state.selectedProduct.selectedIndex==index?'#fff':'grey',fontSize:sizeFont,fontWeight:'700'}}>-  &#8377;{Math.round(item.sellingPrice)}</Text>
+                                </View>
+                              </View>
+                              {value2[index]!=null&&value2[index]!=undefined&&
+                                <View key={index}  style={{width:30,paddingVertical:5,marginHorizontal:5}}>
+                                  <View style={{flexDirection:'row',backgroundColor:'#fff',borderRadius:5,borderWidth:1,borderColor:'#d2d2d2',paddingVertical:5,paddingHorizontal:5,alignItems:'center',justifyContent:'center',}}>
+                                    <View  style={{backgroundColor: value2[index],width:18,height:18,borderRadius:9}}>
+                                    </View>
+                                  </View>
+                                </View>
+                              }
+                            </TouchableOpacity>
+                          )}}
+                  />
+             
+           </View>
+         }
+        
+        </Modal>
+      )
+
+  }
+  
   render(){
       const {navigation} =this.props
      return (
         <View style={{flex:1}}>
+          <Toast style={{backgroundColor: 'red'}}  textStyle={{color: '#fff'}} ref="toast" position = 'center'/>
              <StatusBar style="light" backgroundColor={themecolor} />
                                  {/* HEADERS */}
                 <View style={{marginTop:Constants.statusBarHeight,flexDirection:"row",backgroundColor:"#fff",height:height*0.07,alignItems:"center"}}>
@@ -182,11 +275,27 @@ const images =[
                          data={this.state.mostBoughtItems}
                          keyExtractor={(item,index)=>index.toString()}
                          renderItem={({item,index})=> 
-                         <RenderItems 
-                         item={item} 
-                         index ={index}
-                         onChange={ (args)=> this.updateCart(args)} 
+                         <View>
+                           <RenderItems 
+                            ref={(ref) => {console.log(ref,'snck');this.refs[index] = ref}} 
+                            setCounterAmount={(counter,totalAmount,saved)=>this.props.setCounterAmount(counter,totalAmount,saved)} 
+                            product={item} 
+                            key={index} 
+                            cartLoaderShow={this.state.cartLoaderShow} 
+                            index={index} 
+                            openVariantSelection={(state)=>{this.openVariantSelection(state,'mostBought')}} 
+                            selectedStore={this.state.selectedStore} 
+                            cartItems={this.state.cartItems} 
+                            onChange={ (args)=> this.updateCart(args)} 
+                            navigation={this.props.navigation} 
+                            userScreen={this.state.userScreen} 
+                            store={this.state.store} 
+                            modalVisible={(bool)=>{this.setModalVisible(bool)}}
+                            select ={(product)=>{this.select(product)}} 
+                            
                          />
+                         </View>
+                         
                         }
                          onEndReached={()=>{this.setState({mostBoughtOffset:this.state.mostBoughtOffset+2},()=>{
                                this.mostBought()
@@ -212,13 +321,30 @@ const images =[
                          contentContainerStyle={{flexDirection:"row",marginHorizontal:10,}}
                          data={this.state.forYouItems}
                          keyExtractor={(item,index)=>index.toString()}
-                         renderItem={({item,index})=> 
-                         <RenderItems 
-                         item={item} 
-                         index ={index}
-                         cartItems={this.state.cartItems} 
-                         onChange={ (args)=> this.updateCart(args)} 
-                         />}
+                         renderItem={({item,index})=>
+                            <View>
+                              <RenderItems 
+                          ref={(ref) => this.refs['forYou'+index] = ref} 
+                            setCounterAmount={(counter,totalAmount,saved)=>this.props.setCounterAmount(counter,totalAmount,saved)} 
+                            product={item} 
+                            key={index} 
+                            cartLoaderShow={this.state.cartLoaderShow} 
+                            index={index} 
+                            openVariantSelection={(state)=>{this.openVariantSelection(state,'forYou')}} 
+                            selectedStore={this.state.selectedStore} 
+                            cartItems={this.state.cartItems} 
+                            onChange={ (args)=> this.updateCart(args)} 
+                            navigation={this.props.navigation} 
+                            userScreen={this.state.userScreen} 
+                            store={this.state.store} 
+                            modalVisible={(bool)=>{this.setModalVisible(bool)}} 
+                            select ={(product)=>{this.select(product)}}
+                        
+                         />
+                            </View>
+                       
+
+                         }
                          onEndReached={()=>{this.setState({forYouOffset:this.state.forYouOffset+2},()=>{
                                this.forYou()
                          })}}
@@ -258,11 +384,28 @@ const images =[
                          data={this.state.allProductsItem}
                          keyExtractor={(item,index)=>index.toString()}
                          renderItem={({item,index})=> 
-                         <RenderItems 
-                         item={item} 
-                         index ={index}
-                         onChange={ (args)=> this.updateCart(args)} 
-                         />}
+                         <View>
+                         <RenderItems
+                            ref={(ref) => this.refs["allProducts"+index] = ref} 
+                            setCounterAmount={(counter,totalAmount,saved)=>this.props.setCounterAmount(counter,totalAmount,saved)} 
+                            product={item} 
+                            key={index} 
+                            cartLoaderShow={this.state.cartLoaderShow} 
+                            index={index} 
+                            openVariantSelection={(state)=>{this.openVariantSelection(state,'allProducts')}} 
+                            selectedStore={this.state.selectedStore} 
+                            cartItems={this.state.cartItems} 
+                            onChange={ (args)=> this.updateCart(args)} 
+                            navigation={this.props.navigation} 
+                            userScreen={this.state.userScreen} 
+                            store={this.state.store} 
+                            modalVisible={(bool)=>{this.setModalVisible(bool)}}
+                            select ={(product)=>{this.select(product)}} 
+                           
+                         />
+                         </View>}
+
+
                          onEndReached={()=>{this.setState({allProductsOffset:this.state.allProductsOffset+2},()=>{
                                this.allProducts()
                          })}}
@@ -270,6 +413,9 @@ const images =[
                          ListFooterComponent={this.footer()}
                        />
                    </View>
+                           {
+                             this.variantSelection()
+                           }
              </View>
               </ScrollView>     
         </View>
