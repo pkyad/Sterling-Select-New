@@ -90,6 +90,16 @@ const images =[
       this.forYou()
       this.allProducts()
       this.getServiceCart()
+          this._unsubscribe = this.props.navigation.addListener('focus', () => {
+            console.log("calleddd")
+                  this.mostBought() ; 
+                  this.forYou() ;
+                  this.allProducts();
+                  this.getServiceCart()
+              });
+  }
+  componentWillUnmount(){
+    this._unsubscribe();
   }
    openVariantSelection=(variants,type)=>{
      console.log(variants,'gjhjhjkjk');
