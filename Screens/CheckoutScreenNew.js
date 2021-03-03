@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text ,Dimensions,TouchableOpacity,AsyncStorage} from 'react-native';
+import { View, Text ,Dimensions,TouchableOpacity,AsyncStorage, ScrollView} from 'react-native';
 import  Constants  from 'expo-constants';
 const { width } = Dimensions.get('window');
 const { height } = Dimensions.get('window');
@@ -84,15 +84,16 @@ componentDidMount(){
                     
               </View> 
 
-           <View style={{flex: 1,}}>
+           <View style={{flex: 0.93,}}>
                                  {/* Address */}
-                  <View style={{flex: 0.2}}>
+                 <ScrollView>
+                    <View style={{height:height*0.2,}}>
                       <View style={{flexDirection:"row",padding:20,alignItems:"center",justifyContent:'space-between'}}>
                               <View style={{flexDirection:"row"}}>
                                     <FontAwesome name="send" size={24} color="green" />  
                                     <Text style={{marginLeft:10,fontWeight:"bold",color:"#000"}}>Deliver to</Text>
                               </View>
-                              <TouchableOpacity>
+                              <TouchableOpacity onPress={()=>{this.props.navigation.navigate("AddressScreen")}}>
                                     <Text style={{fontWeight:"bold",color:'#000'}}>EDIT</Text>
                               </TouchableOpacity>
                               
@@ -104,9 +105,9 @@ componentDidMount(){
                   </View>
 
                                         {/* PROMO CODE */}
-                  <View style={{flex: 0.2,alignItems:'center',justifyContent:"center",flexDirection:"row"}}>
+                  <View style={{height:height*0.1,alignItems:'center',justifyContent:"center",flexDirection:"row",}}>
                          <TextInput
-                           style={{flex: 0.8,height:height*0.05,backgroundColor:"#fff",marginLeft:10,borderColor:'#000',borderWidth:0.07,borderRadius:10,paddingLeft:10}}
+                           style={{flex: 0.8,height:height*0.05,backgroundColor:"#fff",marginLeft:10,borderRadius:10,paddingLeft:10}}
                            placeholder="Enter PromoCode"
                            
                          />
@@ -116,6 +117,7 @@ componentDidMount(){
                          </TouchableOpacity>
                       
                   </View>
+
                   <View style={{paddingHorizontal:20,flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}>
                       <View style={{flexDirection:"row",}}>
                               <MaterialIcons name="local-offer" size={24} color="green" />
@@ -128,7 +130,7 @@ componentDidMount(){
                   </View>
                      
                                         {/* NOTES */}
-                  <View style={{flex: 0.2,alignItems:'center',justifyContent:"center"}}>
+                  <View style={{height:height*0.2,alignItems:'center',justifyContent:"center"}}>
                         <View style={{padding:10,flexDirection:"row",alignItems:"center",justifyContent:"space-between",width}}>
                            <Text style={{color:'#000',fontWeight:"bold",}}>Delivery note</Text>
                            <TouchableOpacity>
@@ -144,7 +146,7 @@ componentDidMount(){
                   </View>
 
                                           {/* SUMMARY */}
-                  <View style={{flex: 0.33,paddingVertical:10}}>
+                  <View style={{height:height*0.3,paddingVertical:10}}>
                         <View style={{padding:10,flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
                             <Text style={{color:'#000'}}>Subtotal</Text>
                             <Text style={{color:'#000'}}>₹120</Text>
@@ -169,8 +171,13 @@ componentDidMount(){
 
 
 
-                                    {/* BOTTOM */}
-                    <View style={{height:height*0.1,width:width,flex:0.07,flexDirection:"row",elevation:5}}>
+                     
+          
+                 </ScrollView>
+              </View>  
+            <View style={{flex:0.07,}}>
+                     
+                    <View style={{width:width,flex:1,flexDirection:"row",elevation:5}}>
                      <View style={{flex:0.5,backgroundColor:"#eee"}}>
                          <View style={{}}>
                              <Text style={{color:themeColor,marginLeft:5}}>Total(incl of Taxes)</Text>
@@ -188,7 +195,7 @@ componentDidMount(){
                           
                      </TouchableOpacity>
                 </View>
-           </View>   
+            </View>
       </View>
     );
   }

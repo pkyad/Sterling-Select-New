@@ -24,7 +24,8 @@ const themeColor = settings.themecolor
 import { connect } from 'react-redux';
 import * as actions from '../actions/index';
 import * as actionTypes from '../actions/actionTypes';
-
+import { NavigationContainer, CommonActions } from '@react-navigation/native';
+import HttpsClient from '../helpers/HttpsClient';
 
 
 const domain = settings.domain
@@ -333,6 +334,34 @@ static navigationOptions =  {
      });
   }
 
+getMyDetails =async(sessionid,csrf)=>{
+
+  const api = `${SERVER_URL}'/api/HR/users/?mode=mySelf&format=json`
+  // let data = await HttpsClient.get(api)
+  // console.log(data,"ddddd")
+ await fetch(SERVER_URL + '/api/HR/users/?mode=mySelf&format=json',{
+      headers: {
+        "Cookie" :"csrftoken="+csrf+";sessionid=" +sessionid +";",
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Referer': SERVER_URL,
+        'X-CSRFToken':csrf
+      }
+    })
+     .then(async(response) => {return response.json()})
+     .then(async(responseJson) => {
+       const userPk = responseJson[0].pk
+        AsyncStorage.setItem("Pk", userPk.toString())
+       console.log(userPk,"pkpkpk")
+  
+       const data =await AsyncStorage.getAllKeys()
+       console.log(data,"yyyyyyyy")
+        })
+     .catch((error) => {
+       return
+     });
+    
+}
 
   verify() {
 
@@ -361,14 +390,28 @@ static navigationOptions =  {
           console.log(response.headers,'loginmodeeeeee');
           var sessionid = response.headers.get('set-cookie').split('sessionid=')[1].split(';')[0]
           var csrftoken = response.headers.get('set-cookie').split('csrftoken=')[1].split(';')[0]
+       
           AsyncStorage.setItem("csrf", csrftoken)
+         
           this.setState({ sessionid: sessionid })
           AsyncStorage.setItem("sessionid", sessionid)
           this.props.signedInFunction(true)
           this.setState({ sessionid: sessionid },()=>{
             this.getMyStore()
+            this.getMyDetails(sessionid,csrftoken)
           })
-          return this.props.navigation.navigate("Home")
+          return this.props.navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Tab',
+                  
+                },
+                
+              ],
+            })
+          )
         }
         
         else {

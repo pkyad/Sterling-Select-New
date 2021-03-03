@@ -6,7 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Constants from 'expo-constants';
 import HttpClient from '../helpers/HttpsClient';
-import { Feather } from '@expo/vector-icons';
+import { Feather ,MaterialIcons,AntDesign} from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SliderBox } from "react-native-image-slider-box";
@@ -85,16 +85,15 @@ const images =[
     }
   componentDidMount(){  
       //console.log(this.props,"hhjhj")
-      this.mounted = true;
+   
       this.mostBought()
       this.forYou()
       this.allProducts()
+      
       this.getServiceCart()
           this._unsubscribe = this.props.navigation.addListener('focus', () => {
             console.log("calleddd")
-                  this.mostBought() ; 
-                  this.forYou() ;
-                  this.allProducts();
+                
                   this.getServiceCart()
               });
   }
@@ -107,7 +106,10 @@ const images =[
   }
 
  getServiceCart =async()=>{
-        const api =(`${url}/api/POS/cartService/`)
+        const userPk = await AsyncStorage.getItem("csrf")
+        if(userPk!=null){
+    
+           const api =(`${url}/api/POS/cartService/`)
         const data = await HttpClient.get(api)
         console.log(data)
         if(data.type=="success"){
@@ -124,6 +126,10 @@ const images =[
         this.props.setInitialFunction([],0,0)
         this.props.setCounterAmount(0,0,0)
       }
+        }else{
+          return 
+        }
+        
     }
   
    footer =()=>{
@@ -426,6 +432,40 @@ const images =[
                            {
                              this.variantSelection()
                            }
+             </View>
+                                   {/* FOOTER */}
+             <View style={{height:height*0.05,backgroundColor:themecolor,flexDirection:"row",alignItems:'center',justifyContent:'center'}}>
+                 <View style={{flexDirection:'row',flex:0.6}}>
+                   <View style={{flexDirection:'row',flex:0.5,alignItems:'center',justifyContent:"space-around"}}>
+                         <Text style={{color:"#fff",fontWeight:'bold'}}>Connect</Text>
+                         <TouchableOpacity>
+                              <Feather name="phone" size={24} color="#fff" />
+                         </TouchableOpacity>
+                       
+                   </View>
+                   <View style={{flex:0.5,alignItems:'center',justifyContent:'space-around',flexDirection:'row'}}>
+                           <TouchableOpacity>
+                             <MaterialIcons name="message" size={24} color="#fff" />
+                           </TouchableOpacity>
+                     <TouchableOpacity>
+                        <FontAwesome name="whatsapp" size={24} color="#fff" />
+                       </TouchableOpacity>    
+                   
+                   </View>
+                  
+                 </View>
+                 <View style={{flex:0.4}}>
+                    <View style={{flexDirection:'row',alignItems:'center',justifyContent:"space-around"}}>
+                      <Text style={{color:"#fff"}}>Follow</Text>
+                      <TouchableOpacity>
+                         <AntDesign name="instagram" size={24} color="#fff" />
+                      </TouchableOpacity>
+                      <TouchableOpacity>
+                            <AntDesign name="facebook-square" size={24} color="#fff" />
+                      </TouchableOpacity>
+                      
+                    </View>
+                 </View>
              </View>
               </ScrollView>     
         </View>

@@ -184,7 +184,7 @@ let deviceId = Constants.deviceId
                     </View>
               </View>
               <View style={{marginTop:25}}>
-                  <TouchableOpacity style={{paddingVertical:10,backgroundColor:themeColor,paddingHorizontal:width*0.3}}
+                  <TouchableOpacity style={{paddingVertical:10,backgroundColor:themeColor,paddingHorizontal:width*0.3,borderRadius:10}}
                     onPress={()=>{this.login()}}
                   >
                         <Text style={{color:"#fff",fontWeight:"bold"}}>ENTER</Text>

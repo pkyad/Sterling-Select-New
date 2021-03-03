@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions/index';
 import * as actionTypes from '../actions/actionTypes';
@@ -12,10 +12,40 @@ import settings from '../Appsettings'
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AsyncStorage } from 'react-native';
+import SterlingLogin from '../Screens/SterlingLogin';
+
+
 function TabNavigator(props) {
+
+  const [pk,setPk]= useState(null);
+
+    const Login =async()=>{
+      const Pk = await AsyncStorage.getItem("csrf")
+      setPk(Pk)
+  }
+      useEffect(()=>{
+         Login();
+      },[])
+
     const getTabBarVisibility = (route)=>{
        const routeName = route.state?route.state.routes[route.state.index].name:''
        if(routeName =="CheckoutProductsNew"||"CheckoutProductsNew"){
+         return false
+       }
+       return true
+    }
+     const getTabBarVisibility2 = (route)=>{
+       const routeName = route.state?route.state.routes[route.state.index].name:''
+ 
+       if(
+         routeName =="PasscodeScreen"||
+         routeName=="SterlingOTP"||
+         routeName=="SterlingLogin"||
+         routeName=="RaiseConcern"||
+         routeName=="HelpScreen"||
+         routeName=="ProfilePage"
+             ){
          return false
        }
        return true
@@ -25,7 +55,7 @@ function TabNavigator(props) {
       initialRouteName="Home"
       inactiveColor={"black"}
        tabBarOptions={{
-        activeBackgroundColor:themecolor,
+      activeBackgroundColor:themecolor,
        activeTintColor:"#fff",
        inactiveTintColor:"gray"
       
@@ -33,27 +63,40 @@ function TabNavigator(props) {
     
     >
       <Tab.Screen name="Home" component={HomeStack} 
-    
-          options={{
+           
+          options={({route})=>({
           tabBarLabel: 'Home',
-         
+          tabBarVisible:getTabBarVisibility2(route),
           tabBarIcon: ({ color }) => (
         <AntDesign name="home" size={24} color={color} />
           ),
-          
-        }}
+        
+        })}
+        
       />
       <Tab.Screen name="Cart" component={CartStack}
+      
           options={({ route }) => ({
-        
+          
           tabBarLabel: 'Cart',
           tabBarVisible: getTabBarVisibility(route),
+          
           tabBarIcon: ({ color }) => (
         <Feather name="shopping-cart" size={24} color={color} />
           ),
-          tabBarBadge:props.counter
+          tabBarBadge:props.counter,
+          
       })} 
-       
+      listeners ={({navigation})=>({
+          tabPress:event =>{
+          event.preventDefault();
+           if(pk==null){
+             navigation.navigate("PasscodeScreen")
+           }else{
+             navigation.navigate("Cart")
+           }
+          }
+        })}
       />
        <Tab.Screen name="Catagories" component={CatagoryStack} 
           options={{

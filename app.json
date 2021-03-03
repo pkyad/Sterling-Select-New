@@ -8,7 +8,7 @@
     "splash": {
       "image": "./assets/sterlingsplash1.png",
       "resizeMode": "contain",
-      "backgroundColor": "#efa834"
+      "backgroundColor": "#fff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

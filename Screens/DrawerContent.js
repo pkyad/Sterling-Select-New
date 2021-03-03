@@ -12,42 +12,114 @@ import { SliderBox } from "react-native-image-slider-box";
 import { AntDesign } from '@expo/vector-icons';
 import React, { Component, useState ,useEffect} from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { NavigationContainer, CommonActions } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 const themecolor = settings.themecolor
 const url = settings.url
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-const userPk =AsyncStorage.getItem("userpk")
-const csrf =AsyncStorage.getItem("csrf")
+
 import { connect } from 'react-redux';
 import * as actions from '../actions/index';
 import * as actionTypes from '../actions/actionTypes';
- function DrawerContent(props) {
-   const {navigation} = props
-   const [signedIn,setSignedIn] =useState(false);
-   const [modal,setModal] =useState(false);
-   useEffect(()=>{
-     if(props.signedIn){
-       setSignedIn(true)
-     }
-   },[])
- const logout =()=>{
+
+
+ class DrawerContent extends Component {
+  constructor(props) {
+    
+    super(props);
+    this.state = {
+      signedIn:false,
+      modal:false,
+      profileDetails:null
+    };
+  }
+   getUser = async()=>{
+
+    const userPk = await AsyncStorage.getItem("Pk")
+    //  console.log(userPk,"jjjj")
+     if(userPk!=null){
+      
+      this.setState({signedIn:true})
+      const api =`${url}/api/HR/users/${userPk}/`
+      const userData = await HttpClient.get(api)
+      if(userData.type="success"){
+          this.setState({profileDetails:userData.data})
+      }
+      
+    }else{
+        this.setState({signedIn:false})
+    }
+  
+   };
+UNSAFE_componentWillReceiveProps (){
+
+  this.getUser();
+}
+ componentDidMount (){
+  
+    this.getUser();
+
+  }
+
+   
+ 
+
+
+  logout =()=>{
+   
    AsyncStorage.clear();
-   setSignedIn(false)
-   setModal(false);
+   AsyncStorage.removeItem('sessionid')
+   AsyncStorage.removeItem('csrf')
+   AsyncStorage.removeItem('Pk')
+    this.setState({signedIn:false,modal:false})
+    this.getUser()
+    this.props.setInitialFunction([],0,0)
+    this.props.setCounterAmount(0,0,0)
+    this.props.navigation.closeDrawer();
+    return this.props.navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Tab',
+                  
+                },
+                
+              ],
+            })
+          )
+  
  }
-     if(signedIn){
+
+  render() {
+    const {navigation} = this.props
+   if(this.state.signedIn){
+    let dp ="https://www.kindpng.com/picc/m/52-526043_unknown-person-png-transparent-png.png"
+    let userName =""
+   if(typeof this.state.profileDetails == "object"){
+     dp= this.state.profileDetails?.profile?.displayPicture 
+     userName =this.state.profileDetails?.first_name
+   }
             return (
          
         <View style={{flex:1,backgroundColor:"#fff",marginTop:Constants.statusBarHeight}}>
-            <View style={{flex:0.2,alignItems:"center",justifyContent:"space-around",backgroundColor:themecolor}}>
+            <View style={{flex:0.25,alignItems:"center",justifyContent:"space-around",backgroundColor:themecolor}}>
                 <View>
-                    <Image source={{uri:"https://economictimes.indiatimes.com/thumb/msid-70119616,width-1200,height-900,resizemode-4,imgsize-160034/rohit-sharma-the-odi-cricket-phenomenon.jpg?from=mdr"}}
+                     <View style={{flex:0.7,alignItems:"center",justifyContent:'center'}}>
+                          <Image source={{uri:dp}}
                       style={{height:100,width:100,borderRadius:50,resizeMode:"cover"}}
                     />
-                    <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between",}}>
-                            <Text style={{fontWeight:"bold",fontSize:18,color:"#fff"}}>Abishek</Text>
-                            <TouchableOpacity>
+                     </View>
+                   
+                    <View style={{flexDirection:"row",alignItems:"center",flex:0.3,width:width*0.67}}>
+                      <View style={{flex:0.65}}>
+                            <Text style={{fontWeight:"bold",fontSize:18,color:"#fff",marginRight:10,alignSelf:'flex-end'}} numberOfLines={1}>{userName}</Text>
+
+                      </View>
+                            <TouchableOpacity onPress={()=>{navigation.navigate("ProfilePage")}}
+                             style={{flex:0.35}}
+                            >
                                 <AntDesign name="edit" size={24} color="#fff" />
                             </TouchableOpacity>
                             
@@ -67,21 +139,27 @@ import * as actionTypes from '../actions/actionTypes';
                   <TouchableOpacity>
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>Set Passcode</Text>
                 </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                  onPress={()=>{navigation.navigate("FaqScreen")}}
+                  >
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>FAQ</Text>
                 </TouchableOpacity>
                  <TouchableOpacity
-                   onPress={()=>{navigation.navigate("HelpScreen")}}
+                   onPress={()=>{navigation.navigate("HelpScreen");}}
                  >
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>Help</Text>
                 </TouchableOpacity>
-                 <TouchableOpacity>
+                 <TouchableOpacity
+                  onPress={()=>{navigation.navigate("PolicyScreen")}}
+                 >
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>Polices</Text>
                 </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                  onPress={()=>{navigation.navigate("AboutUs")}}
+                  >
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>About us</Text>
                 </TouchableOpacity>
-                  <TouchableOpacity onPress={()=>{setModal(true)}}>
+                  <TouchableOpacity onPress={()=>{this.setState({modal:true})}}>
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>Sign Out</Text>
                 </TouchableOpacity>
             </View>
@@ -91,10 +169,10 @@ import * as actionTypes from '../actions/actionTypes';
                  />
                  <Text style={{fontWeight:"bold"}}>V 1.0.0</Text>
             </View>
-            <Modal isVisible={modal}
+            <Modal isVisible={this.state.modal}
             backdropColor="#000"
             style={{}}
-            onBackdropPress={()=>{setModal(false)}}
+            onBackdropPress={()=>{this.setState({modal:false})}}
             animationIn="shake"
             animationOut="shake"
             >
@@ -104,12 +182,12 @@ import * as actionTypes from '../actions/actionTypes';
                       </View>
                       <View style={{alignItems:"center",justifyContent:"space-around",flexDirection:"row",flex: 0.5,}}>
                            <TouchableOpacity
-                            onPress={()=>{logout()}}
+                            onPress={()=>{this.logout()}}
                            >
                                   <Text style={{color:"green",fontWeight:'bold',fontSize:20}}>YES</Text>
                            </TouchableOpacity>
                            <TouchableOpacity
-                             onPress={()=>{setModal(false)}}
+                             onPress={()=>{this.setState({modal:false})}}
                            >
                                    <Text style={{color:"green",fontWeight:"bold",fontSize:20}}>NO</Text>
                            </TouchableOpacity>
@@ -151,12 +229,13 @@ import * as actionTypes from '../actions/actionTypes';
             </View>
          </View>
          )
-       
-     }
-    
+  }
 }
 
+ }
+
 const mapStateToProps =(state) => {
+  console.log(state.cartItems.signedIn,"sssss")
     return {
     counter: state.cartItems.counter,
     totalAmount: state.cartItems.totalAmount,

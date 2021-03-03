@@ -9,6 +9,11 @@ import PasscodeScreen from '../Screens/PasscodeScreen';
 import SterlingLogin from '../Screens/SterlingLogin';
 import SterlingOTP from '../Screens/SterlingOTP';
 import productInfo from '../Screens/productInfo';
+import RaiseConcern from '../Screens/RaiseConcern';
+import FaqScreen from '../Screens/FaqScreen';
+import AboutUs from '../Screens/AboutUs';
+import PolicyScreen from '../Screens/PolicyScreen';
+import ProfilePage from '../Screens/ProfilePage';
 
 const Stack = createStackNavigator();
 export default function HomeStack() {
@@ -21,9 +26,14 @@ export default function HomeStack() {
 
                                {/* DRAWER */}
          <Stack.Screen name="HelpScreen" component={HelpScreen} options={{headerShown:false}}/>
+         <Stack.Screen name="RaiseConcern" component={RaiseConcern} options={{headerShown:false}}/>
          <Stack.Screen name="PasscodeScreen" component={PasscodeScreen} options={{headerShown:false}}/>
          <Stack.Screen name="SterlingLogin" component={SterlingLogin} options={{headerShown:false}}/>
          <Stack.Screen name="SterlingOTP" component={SterlingOTP} options={{headerShown:false}}/>
+         <Stack.Screen name="FaqScreen" component={FaqScreen} options={{headerShown:false}}/>
+         <Stack.Screen name="AboutUs" component={AboutUs} options={{headerShown:false}}/>
+         <Stack.Screen name="PolicyScreen" component={PolicyScreen} options={{headerShown:false}}/>
+         <Stack.Screen name="ProfilePage" component={ProfilePage} options={{headerShown:false}}/>
       </Stack.Navigator>
     )
 }

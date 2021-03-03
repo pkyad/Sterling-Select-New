@@ -173,8 +173,10 @@ getUnit=(type,value)=>{
 
   }
      getInitial =async()=>{
-            const pk =  await AsyncStorage.getItem('userpk');
-            const cartdata = await HttpsClient.get(SERVER_URL + '/api/POS/getAllCart/?user='+pk+'&store='+this.state.selectedStore.pk)
+            const pk =  await AsyncStorage.getItem('Pk');
+           if(pk!=null){
+                const cartdata = await HttpsClient.get(SERVER_URL + '/api/POS/getAllCart/?user='+pk+'&store='+this.state.selectedStore.pk)
+
             var count = 0
             if(cartdata.type=="success"){
                         var arr = cartdata.data.cartObj.map((item)=>{
@@ -192,6 +194,10 @@ getUnit=(type,value)=>{
                     })
                    this.setState({cartItems:arr,cartLoader:false})
             }
+           }else{
+             return null
+           }
+            
             
          }
 handleConnectivityChange = (state) => {

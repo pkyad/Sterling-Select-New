@@ -253,12 +253,12 @@ renderInputs=()=>{
   render(){
   
     return(
-      <View style={{flex:1,backgroundColor: '#fff',}}>
+      <ScrollView style={{flex:1,backgroundColor: '#fff',}}>
           <Toast style={{backgroundColor: 'grey'}} textStyle={{color: '#fff'}} ref="toast" position = 'top'/>
           <View style={{height: Constants.statusBarHeight,backgroundColor: themeColor}} >
             <StatusBar  translucent={true} barStyle="light-content" backgroundColor={themeColor} networkActivityIndicatorVisible={false}    />
           </View>
-         <View style={{flex:0.2,flexDirection:"row"}}>
+         <View style={{flexDirection:"row",height:height*0.15,}}>
             <TouchableOpacity onPress={()=>{this.props.navigation.goBack()}} style={{paddingLeft: 15,paddingRight:0,paddingVertical:10,}}>
                   <MaterialIcons name={'arrow-back'} size={23} color={themeColor}/>
                </TouchableOpacity>
@@ -267,8 +267,8 @@ renderInputs=()=>{
                       
                 </View>
          </View>
-          <View style={{flex:0.6}} >
-          <View style={{flex:1,alignItems:"center",}}>
+          <View style={{height:height*0.5,}} >
+          <View style={{alignItems:"center",}}>
 
 
                    <Image source={require('../assets/sterlingsplash1.png')} style={{width:width*0.67,height:height*0.25,resizeMode:"contain"}} />
@@ -279,18 +279,18 @@ renderInputs=()=>{
                       <View style={{flexDirection:'row'}}>
                           {this.renderInputs()}
                       </View>
-                      <TouchableOpacity onPress={()=>{this.sendOtp()}} style={{paddingHorizontal:width*0.23,paddingVertical:3,marginTop:20,backgroundColor:themeColor}}>
+                      <TouchableOpacity onPress={()=>{this.sendOtp()}} style={{paddingHorizontal:width*0.23,paddingVertical:5,marginTop:20,backgroundColor:themeColor,borderRadius:10}}>
                          <Text style={{color:'#fff',fontSize:20,fontWeight:"bold"}}>Sign in with OTP</Text>
                       </TouchableOpacity>
               
               </View>
 
           </View>
-         <View style={{flex: 0.2,flexDirection:"row",alignItems:"center",justifyContent:"space-between",}}>
+         <View style={{height:height*0.2,flexDirection:"row",alignItems:"center",justifyContent:"space-between",marginTop:height*0.1}}>
                 <Image source={require('../assets/images/2.png')} style={{flex:0.5,resizeMode:"cover",width:"100%",height:"100%",}} />
                 <Image source={require('../assets/images/3.png')} style={{flex:0.5,resizeMode:"cover",width:"100%",height:"100%",}} />
               </View> 
-      </View>
+      </ScrollView>
      )
   }
 }

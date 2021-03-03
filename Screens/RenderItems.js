@@ -398,12 +398,19 @@ export default class RenderItems extends React.Component {
   }
 
 
-  addToCartUpdate =()=>{
+  addToCartUpdate = async()=>{
+    const pk = await AsyncStorage.getItem("Pk")
+
     NetInfo.fetch().then(state => {
       if(state.isConnected){
      var selected = this.state.product.variant[this.state.selectedIndex]
      var obj = {productVariant:selected.pk,store:this.state.selectedStore.pk,count:selected.minQtyOrder,type:actionTypes.ADD_TO_CART,}
+     if(pk!=null){
      this.postServiceCart(obj)
+     }else{
+         this.props.navigation.navigate("PasscodeScreen")
+     }
+
    
   }
 })
@@ -507,6 +514,9 @@ export default class RenderItems extends React.Component {
               this.setState({inCart : postItem.data.qty})
               this.props.onChange(obj)
               this.props.setCounterAmount(postItem.data.cartQtyTotal,postItem.data.cartPriceTotal,postItem.data.saved)
+      }else{
+          this.setState({cartLoder:false})
+          
       }
         // fetch(SERVER_URL +'/api/POS/cartService/' , {
         //   method: 'POST',

@@ -26,7 +26,7 @@ import TabNavigator from './TabNavigator'
     return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Tab"
-      
+        
         drawerContent={props => <DrawerContent {...props}/>}
       >
         <Drawer.Screen name="Tab" component={TabNavigator} />
