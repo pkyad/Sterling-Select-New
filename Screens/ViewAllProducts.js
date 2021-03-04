@@ -82,9 +82,10 @@ const height = Dimensions.get('window').height;
                                <Text style={{color:(this.state.type.label=="Most Bought"?themecolor:"gray"),fontWeight:'bold',marginLeft:10}}>Most Bought</Text>
                            </TouchableOpacity>
                            <TouchableOpacity style={{marginTop:7,flexDirection:"row",alignItems:'center',justifyContent:'center'}}
-                            onPress={()=>{this.setState({type:{label:"For You",value:"for_you"},filterModal:false}),()=>{
+                            
+                            onPress={()=>{this.setState({type:{label:"For You",value:"for_you"},filterModal:false},()=>{
                                 this.applyFilter()
-                            }}}
+                            })}}
                            >
                                 <FontAwesome5 name="dot-circle" size={15} color={this.state.type.label=="For You"?themecolor:"gray"} />
                                <Text style={{color:(this.state.type.label=="For You"?themecolor:"gray"),fontWeight:'bold',marginLeft:10}}>For You         </Text>

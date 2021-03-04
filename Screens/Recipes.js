@@ -28,7 +28,7 @@ const url = settings.url
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height
 
-export default class PolicyScreen extends Component {
+export default class Recipes extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,7 +47,7 @@ export default class PolicyScreen extends Component {
                        <Ionicons name="md-arrow-back" size={24} color="#fff" />
                     </TouchableOpacity> 
                     <View style={{flex:0.6,alignItems:'center'}}>
-                         <Text style={{color:"#fff",fontWeight:"bold",fontSize:18}}>Policies</Text>
+                         <Text style={{color:"#fff",fontWeight:"bold",fontSize:18}}>Recipes</Text>
                     </View>
                     <View style={{}}>
 

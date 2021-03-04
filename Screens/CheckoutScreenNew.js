@@ -20,6 +20,7 @@ const SERVER_URL = settings.url
        console.log("calleddd")
     super(props);
     this.state = {
+      defaultAddress:[]
     };
   }
 getUserInfo=async()=>{
@@ -29,9 +30,33 @@ getUserInfo=async()=>{
   console.log(userDetails,"ghgh")
 }
 
+  getAddress = async()=>{
+      const pk = await AsyncStorage.getItem("Pk")
+      const api = `${SERVER_URL}/api/POS/address/?user=${pk}`
+      const address = await HttpsClient.get(api)
+    
+       if(address.type=="success"){
+           this.setState({address:address.data,})
+
+           const filter = address.data.filter((i)=>{
+             return i.primary 
+           })
+          
+           this.setState({defaultAddress:filter})
+       }
+      
+  }
 componentDidMount(){
   this.getUserInfo() 
-    
+  this.getAddress()
+     this._unsubscribe = this.props.navigation.addListener('focus', () => {
+                     this.setState({loader:true})
+                    this.getAddress();
+                  
+              });
+}
+componentWillUnmount(){
+  this._unsubscribe();
 }
   render() {
     return (
@@ -87,7 +112,7 @@ componentDidMount(){
            <View style={{flex: 0.93,}}>
                                  {/* Address */}
                  <ScrollView>
-                    <View style={{height:height*0.2,}}>
+                    <View style={{height:height*0.3,}}>
                       <View style={{flexDirection:"row",padding:20,alignItems:"center",justifyContent:'space-between'}}>
                               <View style={{flexDirection:"row"}}>
                                     <FontAwesome name="send" size={24} color="green" />  
@@ -98,9 +123,22 @@ componentDidMount(){
                               </TouchableOpacity>
                               
                       </View>
-                       <View style={{padding: 20,}}>
-                            <Text>14th cross road,madivala</Text>
-                            <Text>pincode:560068</Text>
+                       <View style={{padding: 20,height:height*0.2}}>
+                            {
+                              this.state.defaultAddress.length>0?<View style={{flex:1}}>
+                            <Text style={{color:'#000'}}>{this.state.defaultAddress[0].title}</Text>
+                            <Text style={{color:'#000'}}>{this.state.defaultAddress[0].street}</Text>
+                            <Text style={{}}>{this.state.defaultAddress[0].landMark}</Text>
+                            <Text style={{}}>{this.state.defaultAddress[0].city} {this.state.defaultAddress[0].pincode}</Text>
+                            <Text style={{}}>{this.state.defaultAddress[0].billingState} </Text>
+                            <Text style={{}}>{this.state.defaultAddress[0].mobileNo} </Text>
+
+                              </View>:<TouchableOpacity style={{padding: 20,height:height*0.2,alignItems:'center',justifyContent:'center'}}
+                              onPress={()=>{this.props.navigation.navigate("AddressScreen")}}
+                              >
+                                   <Text style={{fontWeight:'bold',color:themeColor}}>SELECT AN ADDRESS +</Text>
+                              </TouchableOpacity>
+                            }
                        </View>
                   </View>
 
@@ -177,7 +215,7 @@ componentDidMount(){
               </View>  
             <View style={{flex:0.07,}}>
                      
-                    <View style={{width:width,flex:1,flexDirection:"row",elevation:5}}>
+                    <View style={{width:width,flex:1,flexDirection:"row",}}>
                      <View style={{flex:0.5,backgroundColor:"#eee"}}>
                          <View style={{}}>
                              <Text style={{color:themeColor,marginLeft:5}}>Total(incl of Taxes)</Text>
@@ -201,4 +239,4 @@ componentDidMount(){
   }
 }
 
-export default CheckoutScreenNew
+export default CheckoutScreenNew;

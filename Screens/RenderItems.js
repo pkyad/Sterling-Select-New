@@ -18,6 +18,7 @@ import Modal from "react-native-modal";
 //import { Text } from './StyledText';
 import NetInfo from '@react-native-community/netinfo';
 import HttpsClient from '../helpers/HttpsClient';
+import { TouchableRipple } from 'react-native-paper';
 const url = settings.url
 const themecolor = settings.themecolor
 export default class RenderItems extends React.Component {
@@ -953,11 +954,12 @@ export default class RenderItems extends React.Component {
        var item = this.props.product
     return (
   <View>
-       <TouchableOpacity style={{height:height*0.3,backgroundColor:"#fff",elevation:5,width:width*0.55,marginHorizontal:10,marginBottom:10}}
+       <TouchableWithoutFeedback 
  onPress={()=>{this.props.navigation.navigate('ProductInfo',{pk:item.pk})}}
  
  >
-              <View style={{flex: 0.5,alignItems:"center",justifyContent:"center"}}>
+   <View style={{height:height*0.3,backgroundColor:"#fff",elevation:5,width:width*0.55,marginHorizontal:10,marginBottom:10,borderRadius:10}}>
+         <View style={{flex: 0.5,alignItems:"center",justifyContent:"center"}}>
                   <Image source={{uri:`${url}/media/${item.image}`}} style={{height:"100%",width:"100%",resizeMode:"contain"}} />
               </View>
               <View style={{flex: 0.5,alignItems:"center",justifyContent:"space-around"}}>
@@ -1002,7 +1004,9 @@ export default class RenderItems extends React.Component {
   
                        
               </View>
-          </TouchableOpacity>
+   </View>
+           
+          </TouchableWithoutFeedback>
   </View>      
  
       

@@ -12,8 +12,10 @@ import settings from '../Appsettings'
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, ToastAndroid } from 'react-native';
 import SterlingLogin from '../Screens/SterlingLogin';
+import { color } from 'react-native-reanimated';
+
 
 
 function TabNavigator(props) {
@@ -44,7 +46,12 @@ function TabNavigator(props) {
          routeName=="SterlingLogin"||
          routeName=="RaiseConcern"||
          routeName=="HelpScreen"||
-         routeName=="ProfilePage"
+         routeName=="ProfilePage"||
+         routeName=="Recipes"||
+         routeName=="MyOrders"||
+         routeName=="FaqScreen"||
+         routeName=="PolicyScreen"||
+         routeName=="AboutUs"
              ){
          return false
        }
@@ -62,6 +69,7 @@ function TabNavigator(props) {
      }}
     
     >
+
       <Tab.Screen name="Home" component={HomeStack} 
            
           options={({route})=>({
@@ -85,14 +93,18 @@ function TabNavigator(props) {
         <Feather name="shopping-cart" size={24} color={color} />
           ),
           tabBarBadge:props.counter,
-          
+       tabBarBadgeStyle:{backgroundColor:themecolor,color:'#fff'}
       })} 
+    
       listeners ={({navigation})=>({
           tabPress:event =>{
           event.preventDefault();
            if(pk==null){
              navigation.navigate("PasscodeScreen")
-           }else{
+           }else if(props.counter=="0"){
+            ToastAndroid.show("Empty cart", ToastAndroid.SHORT);
+           }
+           else{
              navigation.navigate("Cart")
            }
           }

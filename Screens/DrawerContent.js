@@ -127,13 +127,17 @@ UNSAFE_componentWillReceiveProps (){
                 </View>
             </View> 
             <View style={{flex:0.8,alignItems:"center",justifyContent:'space-around'}}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{navigation.navigate("MyOrders")}}
+                >
                     <Text  style={{color:themecolor,fontWeight:"bold",fontSize:18}}>My orders</Text>
                 </TouchableOpacity>
                   <TouchableOpacity>
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>Address</Text>
                 </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                      onPress={()=>{navigation.navigate("Recipes")}}
+                  >
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>Recipes</Text>
                 </TouchableOpacity>
                   <TouchableOpacity>

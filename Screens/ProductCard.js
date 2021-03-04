@@ -397,12 +397,17 @@ export default class ProductCard extends React.Component {
   }
 
 
-  addToCartUpdate =()=>{
+  addToCartUpdate = async()=>{
+     const pk = await AsyncStorage.getItem("Pk")
     NetInfo.fetch().then(state => {
       if(state.isConnected){
      var selected = this.state.product.variant[this.state.selectedIndex]
      var obj = {productVariant:selected.pk,store:this.state.selectedStore.pk,count:selected.minQtyOrder,type:actionTypes.ADD_TO_CART,}
+      if(pk!=null){
      this.postServiceCart(obj)
+     }else{
+         this.props.navigation.navigate("PasscodeScreen")
+     }
    
   }
 })

@@ -21,10 +21,8 @@ const url = settings.url
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const images =[
-        "https://source.unsplash.com/1024x768/?nature",
-        "https://source.unsplash.com/1024x768/?water",
-        "https://source.unsplash.com/1024x768/?girl",
-        "https://source.unsplash.com/1024x768/?tree",
+         require('../assets/images/Banner.png'),
+         require('../assets/images/banner 2.png'),
 ]
 
 
@@ -326,7 +324,7 @@ const images =[
              <View>
                    <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between",padding:20}}>
                       <Text style={{fontWeight:"bold",textDecorationLine:'underline'}}>For You</Text>
-                       <TouchableOpacity>
+                       <TouchableOpacity onPress={()=>{navigation.navigate("ViewAllProducts")}}>
                            <Text style={{color:"green",fontWeight:"bold"}}>VIEW ALL</Text>
                        </TouchableOpacity>
                    </View>
@@ -388,7 +386,7 @@ const images =[
              <View>
                    <View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between",padding:20}}>
                       <Text style={{fontWeight:"bold",textDecorationLine:'underline'}}>View All Products</Text>
-                       <TouchableOpacity>
+                       <TouchableOpacity onPress={()=>{navigation.navigate("ViewAllProducts")}}>
                            <Text style={{color:"green",fontWeight:"bold"}}>VIEW ALL</Text>
                        </TouchableOpacity>
                    </View>

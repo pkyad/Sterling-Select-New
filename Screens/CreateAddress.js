@@ -32,32 +32,85 @@ const height = Dimensions.get('window').height
 export default class CreateAddress extends Component {
   constructor(props) {
     super(props);
+    const edit =props.route.params?.edit||null
+    const type = props.route.params?.address?.address_type||"HOME"
+    const name = props.route.params?.address?.title||null
+    const mobile = props.route.params?.address?.mobileNo||null
+    const pincode = props.route.params?.address?.street||null
+    const locality = props.route.params?.address?.billingStreet||null
+    const nearestLandMark = props.route.params?.address?.landMark||null
+    const city = props.route.params?.address?.city||null
+    const primary = props.route.params?.address?.primary||false
+    const address = props.route.params?.address?.street||null
+    const pk = props.route.params?.address?.pk||null
     this.state = {
-        type:"home",
-        name:null,
-        mobile:null,
-        pincode:null,
-        locality:null,
-        nearestLandMark:null,
-        city:null
+        type,
+        name,
+        mobile,
+        pincode,
+        locality,
+        nearestLandMark,
+        city,
+        primary,
+        address,
+        edit,
+        pk
     };
   }
 
   componentDidMount(){
-
+   console.log(this.state.edit,"kkkk")
   }
 postAddress = async()=>{
    const api = `${url}/api/POS/address/`
    let sendData ={
        city:this.state.city,
-       state:this.state.state,
+       state:"Karnataka",
        pincode:this.state.pincode,
        country:"India",
-       landmark:this.state.landmark,
-    
-
+       landMark:this.state.nearestLandMark,
+       street:this.state.address,
+       address_type:this.state.type,
+       title:this.state.name,
+       mobileNo:this.state.mobile,  
    }
+   if(this.state.primary){
+      sendData.primary= true
+   }
+   console.log(sendData,"kkk")
+   const postaddress = await HttpClient.post(api,sendData)
+  if(postaddress.type=="success"){
+       if(this.state.primary){
+          this.props.navigation.navigate("CheckoutScreenNew")
+       }else{
+          this.props.navigation.goBack();
+       }
+  }
+}
 
+  patchAddress = async(item)=>{
+      const api = `${url}/api/POS/address/${this.state.pk}/`
+      let sendData ={
+       city:this.state.city,
+       state:"Karnataka",
+       pincode:this.state.pincode,
+       country:"India",
+       landMark:this.state.nearestLandMark,
+       street:this.state.address,
+       address_type:this.state.type,
+       title:this.state.name,
+       mobileNo:this.state.mobile,
+        
+   }
+   if(this.state.primary){
+      sendData.primary= true
+   }
+   const patch = await  HttpClient.patch(api,sendData)
+    if(patch.type == "success"){
+      this.props.navigation.goBack()
+    }else{
+       this.refs.toast.show('Try Again');
+    }
 }
 
   render() {
@@ -70,9 +123,9 @@ postAddress = async()=>{
                     onPress={()=>{navigation.goBack()}}
                    >
                        <Ionicons name="md-arrow-back" size={24} color="#fff" />
-                    </TouchableOpacity> 
+                    </TouchableOpacity>  
                     <View style={{flex:0.6,alignItems:'center'}}>
-                         <Text style={{color:"#fff",fontWeight:"bold",fontSize:18}}>Add New address</Text>
+                         <Text style={{color:"#fff",fontWeight:"bold",fontSize:18}}>{this.state.edit?"Edit Address":"Add New address"}</Text>
                     </View>
                     <View style={{}}>
 
@@ -137,16 +190,33 @@ postAddress = async()=>{
                               <Text style={{padding: 10,}}>Type of Address</Text>
                               <View style={{flexDirection:'row',paddingHorizontal:20}}>
                                      <TouchableOpacity style={{flexDirection:"row"}}
-                                        onPress={()=>{this.setState({type:"home"})}}
+                                        onPress={()=>{this.setState({type:"HOME"})}}
                                      >
-                                         <Octicons name="primitive-dot" size={24} color={(this.state.type=="home"?themecolor:"#D3d3d3")} />
+                                         <Octicons name="primitive-dot" size={24} color={(this.state.type=="HOME"?themecolor:"#D3d3d3")} />
                                          <Text style={{marginLeft:10}}>Home</Text>
                                      </TouchableOpacity>
                                      <TouchableOpacity style={{flexDirection:'row',marginLeft:20}}
-                                        onPress={()=>{this.setState({type:"office"})}}
+                                        onPress={()=>{this.setState({type:"OFFICE"})}}
                                      >
-                                         <Octicons name="primitive-dot" size={24} color={(this.state.type=="office"?themecolor:"#D3d3d3")} />
+                                         <Octicons name="primitive-dot" size={24} color={(this.state.type=="OFFICE"?themecolor:"#D3d3d3")} />
                                          <Text style={{marginLeft:10}}>Office</Text>
+                                     </TouchableOpacity>
+                              </View>
+                           </View>
+                           <View style={{marginTop:20,backgroundColor:"#fafafa",height:height*0.1,width:width*0.9,borderRadius:10}}>
+                              <Text style={{padding: 10,}}>Set as Default</Text>
+                              <View style={{flexDirection:'row',paddingHorizontal:20}}>
+                                     <TouchableOpacity style={{flexDirection:"row"}}
+                                        onPress={()=>{this.setState({primary:true})}}
+                                     >
+                                         <Octicons name="primitive-dot" size={24} color={(this.state.primary?themecolor:"#D3d3d3")} />
+                                         <Text style={{marginLeft:10}}>Yes</Text>
+                                     </TouchableOpacity>
+                                     <TouchableOpacity style={{flexDirection:'row',marginLeft:20}}
+                                        onPress={()=>{this.setState({primary:false})}}
+                                     >
+                                         <Octicons name="primitive-dot" size={24} color={(!this.state.primary?themecolor:"#D3d3d3")} />
+                                         <Text style={{marginLeft:10}}>No</Text>
                                      </TouchableOpacity>
                               </View>
                            </View>
@@ -162,7 +232,14 @@ postAddress = async()=>{
                             <Text style={{fontWeight:'bold',color:"#fff"}}>CANCEL</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={{backgroundColor:themecolor,flex:0.5,alignItems:'center',justifyContent:'center',height:"100%"}}
-                        onPress={()=>{this.postAddress()}}
+                        onPress={()=>{
+                           if(this.state.edit){
+                              this.patchAddress()
+                           }else{
+                              this.postAddress()
+                           }
+                           
+                        }}
                       >
                           <Text style={{fontWeight:'bold',color:"#fff"}}>SAVE</Text>
                       </TouchableOpacity>

@@ -14,6 +14,8 @@ import FaqScreen from '../Screens/FaqScreen';
 import AboutUs from '../Screens/AboutUs';
 import PolicyScreen from '../Screens/PolicyScreen';
 import ProfilePage from '../Screens/ProfilePage';
+import MyOrders from '../Screens/MyOrders';
+import Recipes from '../Screens/Recipes';
 
 const Stack = createStackNavigator();
 export default function HomeStack() {
@@ -34,6 +36,9 @@ export default function HomeStack() {
          <Stack.Screen name="AboutUs" component={AboutUs} options={{headerShown:false}}/>
          <Stack.Screen name="PolicyScreen" component={PolicyScreen} options={{headerShown:false}}/>
          <Stack.Screen name="ProfilePage" component={ProfilePage} options={{headerShown:false}}/>
+         <Stack.Screen name="MyOrders" component={MyOrders} options={{headerShown:false}}/>
+         <Stack.Screen name="Recipes" component={Recipes} options={{headerShown:false}}/>
+        
       </Stack.Navigator>
     )
 }
