@@ -62,7 +62,19 @@ export default class CreateAddress extends Component {
    console.log(this.state.edit,"kkkk")
   }
 postAddress = async()=>{
-   const api = `${url}/api/POS/address/`
+
+      const mob = /^[1-9]{1}[0-9]{9}$/;
+      var pincode = this.state.pincode||""
+      var mobileNo = this.state.mobile
+    if (mobileNo == undefined || mob.test(mobileNo) == false) {
+        this.refs.toast.show('Enter Correct Mobile No');
+    }else if(this.state.name==null||undefined||""){
+       this.refs.toast.show('Name Required');
+    }else if(pincode.length!=6){
+       this.refs.toast.show('Enter correct pincode');
+    }
+    else{
+          const api = `${url}/api/POS/address/`
    let sendData ={
        city:this.state.city,
        state:"Karnataka",
@@ -86,6 +98,8 @@ postAddress = async()=>{
           this.props.navigation.goBack();
        }
   }
+    }
+  
 }
 
   patchAddress = async(item)=>{
@@ -117,6 +131,8 @@ postAddress = async()=>{
       const {navigation} = this.props
     return (
       <View style={{flex:1}}>
+          <Toast style={{backgroundColor: 'grey'}} textStyle={{color: '#fff'}} ref="toast" position = 'top'/>
+
         {/* HEADERS */}
               <View style={{marginTop:Constants.statusBarHeight,height:height*0.07,backgroundColor:themecolor,alignItems:'center',flexDirection:"row"}}>
                    <TouchableOpacity style={{marginLeft:15,flex: 0.17,}}
