@@ -72,6 +72,8 @@ postAddress = async()=>{
        this.refs.toast.show('Name Required');
     }else if(pincode.length!=6){
        this.refs.toast.show('Enter correct pincode');
+    }else if(this.state.nearestLandMark==null||undefined||""){
+       this.refs.toast.show('nearestLandMark Required');
     }
     else{
           const api = `${url}/api/POS/address/`
