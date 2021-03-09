@@ -39,14 +39,14 @@ static navigationOptions =  {
     console.log(props)
     super(props);
     //  const screentype = props.navigation.getParam('screentype',null)
-    //  const mobileNo = props.navigation.getParam('username',null)
+           const mobileNo = props.route.params.username
     this.state = {
       username:'',
       otp:[],
       needOTP:true,
       text:'',
       screen:'',
-      mobileNo:"",
+      mobileNo,
       checked:true,
       store:this.props.store,
       selectedStore:this.props.selectedStore,

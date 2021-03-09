@@ -39,7 +39,7 @@ function TabNavigator(props) {
     }
      const getTabBarVisibility2 = (route)=>{
        const routeName = route.state?route.state.routes[route.state.index].name:''
- 
+        console.log(routeName,"kkk")
        if(
          routeName =="PasscodeScreen"||
          routeName=="SterlingOTP"||
@@ -51,7 +51,24 @@ function TabNavigator(props) {
          routeName=="MyOrders"||
          routeName=="FaqScreen"||
          routeName=="PolicyScreen"||
-         routeName=="AboutUs"
+         routeName=="AboutUs"||
+         routeName=="SearchScreen"||
+         routeName=="AddressScreen2"||
+         routeName=="CreateAddress2"
+
+       
+             ){
+         return false
+       }
+       return true
+    }
+        const getTabBarVisibility3 = (route)=>{
+       const routeName = route.state?route.state.routes[route.state.index].name:''
+
+       if(
+        
+         routeName=="SearchScreen2"
+       
              ){
          return false
        }
@@ -100,7 +117,7 @@ function TabNavigator(props) {
           tabPress:event =>{
           event.preventDefault();
            if(pk==null){
-             navigation.navigate("PasscodeScreen")
+             navigation.navigate("SterlingLogin")
            }else if(props.counter=="0"){
             ToastAndroid.show("Empty cart", ToastAndroid.SHORT);
            }
@@ -111,12 +128,13 @@ function TabNavigator(props) {
         })}
       />
        <Tab.Screen name="Catagories" component={CatagoryStack} 
-          options={{
+          options={({ route }) => ({
           tabBarLabel: 'Catagories',
+             tabBarVisible: getTabBarVisibility3(route),
           tabBarIcon: ({ color }) => (
         <MaterialCommunityIcons name="view-grid" size={24} color={color} />
           ),
-        }}
+         })} 
       />
     </Tab.Navigator>
   );

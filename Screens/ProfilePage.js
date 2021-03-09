@@ -60,8 +60,9 @@ export default class ProfilePage extends Component {
   _pickImage = async () => {
    let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true
+      allowsMultipleSelection: false
    });
+    
    if(result.cancelled == true){
      return
    }
@@ -74,6 +75,8 @@ export default class ProfilePage extends Component {
       name:filename,
    };
    this.setState({dp:photo.uri,image:photo})
+
+
 };
   componentDidMount(){
       this.getProfileInfo()

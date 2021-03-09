@@ -16,6 +16,10 @@ import PolicyScreen from '../Screens/PolicyScreen';
 import ProfilePage from '../Screens/ProfilePage';
 import MyOrders from '../Screens/MyOrders';
 import Recipes from '../Screens/Recipes';
+import AddressScreen from '../Screens/AddressScreen';
+import CreateAddress from '../Screens/CreateAddress';
+import AddressScreen2 from '../Screens/AddressScreen2';
+import CreateAddress2 from '../Screens/CreateAddress2';
 
 const Stack = createStackNavigator();
 export default function HomeStack() {
@@ -38,6 +42,8 @@ export default function HomeStack() {
          <Stack.Screen name="ProfilePage" component={ProfilePage} options={{headerShown:false}}/>
          <Stack.Screen name="MyOrders" component={MyOrders} options={{headerShown:false}}/>
          <Stack.Screen name="Recipes" component={Recipes} options={{headerShown:false}}/>
+         <Stack.Screen name="AddressScreen2" component={AddressScreen2} options={{headerShown:false}}/>
+         <Stack.Screen name="CreateAddress2" component={CreateAddress2} options={{headerShown:false}}/>
         
       </Stack.Navigator>
     )

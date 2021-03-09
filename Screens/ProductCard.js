@@ -406,7 +406,7 @@ export default class ProductCard extends React.Component {
       if(pk!=null){
      this.postServiceCart(obj)
      }else{
-         this.props.navigation.navigate("PasscodeScreen")
+         this.props.navigation.navigate("SterlingLogin")
      }
    
   }

@@ -1,5 +1,5 @@
 import React ,{useEffect, useState} from 'react';
-import { View, Text, TouchableOpacity ,Dimensions,Image, FlatList,ActivityIndicator, AsyncStorage} from 'react-native';
+import { View, Text, TouchableOpacity ,Dimensions,Image, FlatList,ActivityIndicator, AsyncStorage, Platform} from 'react-native';
 import settings from '../Appsettings'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { StatusBar } from 'expo-status-bar';
@@ -16,6 +16,7 @@ import * as actionTypes from '../actions/actionTypes';
 import RenderItems from './RenderItems';
 import Modal from "react-native-modal";
 import Toast, {DURATION} from 'react-native-easy-toast';
+import {Linking} from 'react-native';
 const themecolor = settings.themecolor
 const url = settings.url
 const width = Dimensions.get('window').width;
@@ -44,12 +45,18 @@ const images =[
         selectedProduct:null,
         variantShow:false,
         selectedStore:this.props.selectedStore,
-        
+        appDetails:null
     };
 
   }
    
-
+    getAppDetails = async()=>{
+      const api = `${url}/api/POS/getstoreLite/`
+      let details =await HttpClient.get(api)
+      if(details.type=="success"){
+          this.setState({appDetails:details.data})
+      }
+    }
    
      mostBought =async()=>{
         const api = `${url}/api/POS/productliteApp/?limit=2&offset=${this.state.mostBoughtOffset}&type=most_bought`
@@ -87,7 +94,7 @@ const images =[
       this.mostBought()
       this.forYou()
       this.allProducts()
-      
+      this.getAppDetails()
       this.getServiceCart()
           this._unsubscribe = this.props.navigation.addListener('focus', () => {
             console.log("calleddd")
@@ -256,7 +263,7 @@ const images =[
                 </View>
          <ScrollView>
              <View style={{height:height*0.04,backgroundColor:themecolor,alignItems:"center",justifyContent:"center"}}>
-                  <Text style={{color:"#fff"}}>Free Delivery in Bengaluru ! Now COD & SODEXO availble</Text>
+                  <Text style={{color:"#fff"}}>{this.state.appDetails?.headerTitle}</Text>
              </View>
                              
                                         {/* CAROUSEL */}
@@ -436,16 +443,35 @@ const images =[
                  <View style={{flexDirection:'row',flex:0.6}}>
                    <View style={{flexDirection:'row',flex:0.5,alignItems:'center',justifyContent:"space-around"}}>
                          <Text style={{color:"#fff",fontWeight:'bold'}}>Connect</Text>
-                         <TouchableOpacity>
+                         <TouchableOpacity 
+                          onPress={()=>{
+                            if(Platform.OS=="android"){
+                              Linking.openURL(`tel:${this.state.appDetails?.mobile}`)
+                            }else{
+                              
+                                 Linking.canOpenURL(`telprompt:${this.state.appDetails?.mobile}`)
+                            }
+                          }}
+                         >
                               <Feather name="phone" size={24} color="#fff" />
                          </TouchableOpacity>
                        
                    </View>
                    <View style={{flex:0.5,alignItems:'center',justifyContent:'space-around',flexDirection:'row'}}>
-                           <TouchableOpacity>
+                           <TouchableOpacity 
+                             onPress={()=>{
+                              let  urll = `sms:${this.state.appDetails?.mobile}${Platform.OS === "ios" ? "&" : "?"}body=${""}`
+
+                                  Linking.openURL(urll);
+                             }}
+                           >
                              <MaterialIcons name="message" size={24} color="#fff" />
                            </TouchableOpacity>
-                     <TouchableOpacity>
+                     <TouchableOpacity 
+                      onPress={()=>{
+                        Linking.openURL(`whatsapp://send?phone=${this.state.appDetails?.whatsappNo}`)
+                      }}
+                     >
                         <FontAwesome name="whatsapp" size={24} color="#fff" />
                        </TouchableOpacity>    
                    
@@ -455,10 +481,18 @@ const images =[
                  <View style={{flex:0.4}}>
                     <View style={{flexDirection:'row',alignItems:'center',justifyContent:"space-around"}}>
                       <Text style={{color:"#fff"}}>Follow</Text>
-                      <TouchableOpacity>
+                      <TouchableOpacity 
+                       onPress={()=>{
+                           Linking.openURL(`${this.state.appDetails?.instagramLink}`)
+                       }}
+                      >
                          <AntDesign name="instagram" size={24} color="#fff" />
                       </TouchableOpacity>
-                      <TouchableOpacity>
+                      <TouchableOpacity 
+                         onPress={()=>{
+                           Linking.openURL(`${this.state.appDetails?.fbLink}`)
+                       }}
+                      >
                             <AntDesign name="facebook-square" size={24} color="#fff" />
                       </TouchableOpacity>
                       

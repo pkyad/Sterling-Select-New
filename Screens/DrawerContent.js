@@ -132,7 +132,9 @@ UNSAFE_componentWillReceiveProps (){
                 >
                     <Text  style={{color:themecolor,fontWeight:"bold",fontSize:18}}>My orders</Text>
                 </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity 
+                   onPress={()=>{navigation.navigate("AddressScreen2")}}
+                  >
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>Address</Text>
                 </TouchableOpacity>
                   <TouchableOpacity
@@ -140,9 +142,9 @@ UNSAFE_componentWillReceiveProps (){
                   >
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>Recipes</Text>
                 </TouchableOpacity>
-                  <TouchableOpacity>
+                  {/* <TouchableOpacity>
                     <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>Set Passcode</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                   <TouchableOpacity
                   onPress={()=>{navigation.navigate("FaqScreen")}}
                   >
@@ -218,7 +220,7 @@ UNSAFE_componentWillReceiveProps (){
                       <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>About us</Text>
                     </TouchableOpacity>
                      <TouchableOpacity style={{marginTop:30}}
-                       onPress={()=>{navigation.navigate('PasscodeScreen')}}
+                       onPress={()=>{navigation.navigate('SterlingLogin')}}
                      >
                       <Text style={{color:themecolor,fontWeight:"bold",fontSize:18}}>Sign In</Text>
                     </TouchableOpacity>
