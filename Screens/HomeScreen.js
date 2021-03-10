@@ -298,7 +298,7 @@ const images =[
                          renderItem={({item,index})=> 
                          <View>
                            <RenderItems 
-                            ref={(ref) => {console.log(ref,'snck');this.refs[index] = ref}} 
+                            ref={(ref) => {this.refs[index] = ref}} 
                             setCounterAmount={(counter,totalAmount,saved)=>this.props.setCounterAmount(counter,totalAmount,saved)} 
                             product={item} 
                             key={index} 

@@ -337,8 +337,8 @@ removeCoupon = async()=>{
                          </View>    
                      </View>
                       <TouchableOpacity style={{flex:0.5,backgroundColor:themeColor,alignItems:"center",justifyContent:"center"}}
-                        // onPress={()=>{this.props.navigation.navigate('PaymentScreenNew')}}
-                        onPress={()=>{this.createOrder()}}
+                         onPress={()=>{this.props.navigation.navigate('PaymentScreenNew')}}
+                        // onPress={()=>{this.createOrder()}}
                       >
                          
                                     <Text style={{color:"#fff",fontWeight:"bold",fontSize:20}}>Proceed</Text>
