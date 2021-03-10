@@ -80,6 +80,7 @@ componentDidMount(){
            <View style={{alignItems:"center",justifyContent:"center",backgroundColor:"#fff",height:height*0.3,borderRadius:10}}>
                 
                   <Text style={{marginTop:15}}>Available Quantities for</Text>
+                  <Text style={{marginTop:15}}>{this.state.selectedProduct.name}</Text>
                   <FlatList contentContainerStyle={{alignItems:"center",justifyContent:"center",marginTop:15}}
                         data={this.state.selectedProduct.variants}
                         keyExtractor={(item,index) => {

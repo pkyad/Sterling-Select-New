@@ -192,6 +192,7 @@ getDetails =async(pk)=>{
            <View style={{alignItems:"center",justifyContent:"center",backgroundColor:"#fff",height:height*0.3,borderRadius:10}}>
                 
                   <Text style={{marginTop:15}}>Available Quantities for</Text>
+                   <Text style={{marginTop:15}}>{this.state.selectedProduct.name}</Text>
                   <FlatList contentContainerStyle={{alignItems:"center",justifyContent:"center",marginTop:15}}
                         data={this.state.selectedProduct.variants}
                         keyExtractor={(item,index) => {
@@ -297,30 +298,7 @@ getDetails =async(pk)=>{
                             select ={(product)=>{this.select(product)}} 
                         
                         />}
-                  {/* <View style={{height:height*0.2,alignItems:'center',justifyContent:"center"}}>
-                       <View style={{flex:0.33,alignItems:"center",justifyContent:'center'}}>
-                           <Text style={{color:"green",fontWeight:"bold"}}>Selling Price</Text>
-                       </View>
-                       <View style={{flex:0.33,flexDirection:"row",alignItems:"center",justifyContent:'center'}}>
-                            <View style={{flex:0.33,alignItems:"center",justifyContent:"center"}}>
-                                <Text>jjj</Text>
-                            </View>
-                            <View style={{flex:0.33,alignItems:"center",justifyContent:"center"}}>
-                               <Text style={{color:themecolor,fontWeight:"bold",fontSize:30}}>₹{this.state.productDetails.sellingPrice}</Text>
-                            </View>
-                            <View style={{flex:0.33,alignItems:"center",justifyContent:"center"}}>
-                               <Text style={{color:"gray",fontWeight:"bold",fontSize:20,textDecorationLine:"line-through"}}>₹{this.state.productDetails.price}</Text>
-                                
-                            </View>
-                       </View>
-                       <View style={{flex:0.33,alignItems:"center",justifyContent:"center"}}>
-                           <TouchableOpacity style={{borderColor:'gray',borderWidth:2,flexDirection:"row",width:width*0.5,height:height*0.05,alignItems:"center",justifyContent:"center",borderRadius:20}}>
-                                  <Text>ADD TO</Text>
-                            <Feather name="shopping-cart" size={24} color="gray" style={{marginRight:10}}/>
-
-                           </TouchableOpacity>
-                       </View>
-                  </View>       */}
+             
 
                                {/* SIMILAR PRODUCTS */}
                    <View style={{padding: 10,}}>

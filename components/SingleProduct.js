@@ -922,7 +922,7 @@ export default class SingleProduct extends React.Component {
             )
         }else{
             return(
-           <View style={{flexDirection:"row",width:width*0.5,borderColor:"gray",borderWidth:2,borderRadius:10,alignItems:'center',justifyContent:"space-around"}}>
+           <View style={{flexDirection:"row",width:width*0.3,borderColor:"gray",borderWidth:2,borderRadius:10,alignItems:'center',justifyContent:"space-around",height:height*0.05}}>
               <TouchableOpacity style={{}}
                 onPress={this.decreaseCart}
               >

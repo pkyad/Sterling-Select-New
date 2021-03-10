@@ -195,6 +195,7 @@ const images =[
            <View style={{alignItems:"center",justifyContent:"center",backgroundColor:"#fff",height:height*0.3,borderRadius:10}}>
                 
                   <Text style={{marginTop:15}}>Available Quantities for</Text>
+                  <Text style={{marginTop:15}}>{this.state.selectedProduct.name}</Text>
                   <FlatList contentContainerStyle={{alignItems:"center",justifyContent:"center",marginTop:15}}
                         data={this.state.selectedProduct.variants}
                         keyExtractor={(item,index) => {
@@ -345,7 +346,7 @@ const images =[
                          renderItem={({item,index})=>
                             <View>
                               <RenderItems 
-                          ref={(ref) => this.refs['forYou'+index] = ref} 
+                            ref={(ref) => this.refs['forYou'+index] = ref} 
                             setCounterAmount={(counter,totalAmount,saved)=>this.props.setCounterAmount(counter,totalAmount,saved)} 
                             product={item} 
                             key={index} 
